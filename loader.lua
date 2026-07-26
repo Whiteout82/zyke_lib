@@ -135,6 +135,9 @@ Functions.debug.internal("Loaded fuel", FuelSystem)
 loadSystem("death", "death")
 Functions.debug.internal("Loaded death", DeathSystem)
 
+loadSystem("hud", "hud")
+Functions.debug.internal("Loaded HUD", HudSystem)
+
 loadSystem("banking", "banking")
 Functions.debug.internal("Loaded banking", BankingSystem)
 

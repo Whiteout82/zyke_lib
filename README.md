@@ -94,6 +94,11 @@ Some inventories offer a lot of backwards-compatible functionality and you may n
 -   `systems/death.lua`
 -   `functions/isPlayerDead/client.lua`
 
+### HUD
+
+-   `systems/hud.lua`
+-   `functions/hud/client.lua`
+
 ### Framework
 
 To add in a completely new framework, you would need to modify pretty much all files.
@@ -133,6 +138,7 @@ Each system supports the following values:
 | `gang` | `"auto"`, `"none"`, `"pug-gangs"` |
 | `fuel` | `"auto"`, `"none"`, `"ox_fuel"`, `"LegacyFuel"`, `"cdn-fuel"`, `"lc_fuel"` |
 | `death` | `"auto"`, `"none"`, `"sky_ambulancejob"`, `"wasabi_ambulance"`, `"wasabi_ambulance_v2"`, `"osp_ambulance"` |
+| `hud` | `"auto"`, `"none"`, or any HUD listed under [HUD Visibility](#hud-visibility) |
 | `banking` | `"auto"`, `"none"`, `"tgg-banking"`, `"Renewed-Banking"`, `"RxBanking"`, `"okokBanking"`, `"bablo-banking"`, `"sky_banking"` |
 | `notification` | `"auto"`, `"none"`, `"ox_lib"` |
 | `progressbar` | `"auto"`, `"zyke_lib"`, `"ox_lib"` |
@@ -149,6 +155,7 @@ return {
     gang = "none",    -- Use framework's built-in gang system
     fuel = "ox_fuel",
     death = "auto",
+    hud = "auto",
     banking = "none",
     notification = "auto",
     progressbar = "auto",
@@ -156,6 +163,35 @@ return {
 ```
 
 > **Tip:** If your server gets stuck on the dependency loading step, set the appropriate system to the exact resource name you use instead of `"auto"`.
+
+## HUD Visibility
+
+`Z.hud.toggle(visible)`, `Z.hud.hide()`, and `Z.hud.show()` control the detected external HUD. When no external HUD is selected, they control the native GTA HUD and radar instead. `Z.hud.get()` returns the current visibility when it can be determined reliably, otherwise it returns `nil`.
+
+A getter is not required to control a HUD. When available, it provides a better experience by letting `zyke_lib` avoid changing a HUD whose visibility already matches the requested state. The native fallback returns `nil` when the HUD and radar have different visibility states so the next toggle can synchronize both.
+
+| HUD resource | Visibility integration | Getter |
+|---|---|---|
+| None selected | `DisplayHud(visible)` / `DisplayRadar(visible)` | `IsHudHidden()` / `IsRadarHidden()` |
+| `jg-hud` | `toggleHud(visible)` | — |
+| `esx_hud` | `HudToggle(visible)` | — |
+| `wais-hudv6` | `showHud()` / `hideHud()` | — |
+| `0r-hud-v3` | `ToggleVisible(visible)` | — |
+| `17mov_Hud` | `ToggleDisplay(visible)` | — |
+| `izzy-hudv5` | `setDisplay(visible)` | — |
+| `izzy-hudv6` | `setDisplay(visible)` | — |
+| `izzy-hudv7` | `showHUD()` / `hideHUD()` | — |
+| `vms_hud` | `Display(visible)` | — |
+| `rhud` | `set_visible(visible)` | `get_visible()` |
+| `envi-hud` | `ToggleHUD(visible)` | — |
+| `cx-hud` | `showHud()` / `hideHud()` | — |
+| `tgiann-lumihud` | `tgiann-lumihud:ui` event | — |
+| `hex_4_hud` | `HideHud(not visible)` | — |
+| `minimal-hud` | `toggleHud(visible)` | — |
+| `tgg-hud` | `ToggleHud(visible)` | — |
+| `sync-hud` | `ToggleHUD(visible)` | — |
+| `hex_hud_prem` | `HideHud(not visible)` | — |
+| `bablo-hud` | `ShowHud()` / `HideHud()` | `IsHudVisible()` |
 
 ## Loader
 

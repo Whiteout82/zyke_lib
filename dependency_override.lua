@@ -50,6 +50,12 @@ return {
     -- Options: "auto", "none", "sky_ambulancejob", "wasabi_ambulance", "wasabi_ambulance_v2", "osp_ambulance"
     death = "auto",
 
+    -- HUD system (set to "none" if you don't use a HUD resource)
+    -- Options: "auto", "none", "jg-hud", "esx_hud", "wais-hudv6", "0r-hud-v3", "17mov_Hud",
+    -- "izzy-hudv6", "vms_hud", "rhud", "envi-hud", "cx-hud", "tgiann-lumihud", "izzy-hudv7",
+    -- "hex_4_hud", "minimal-hud", "izzy-hudv5", "tgg-hud", "sync-hud", "hex_hud_prem", "bablo-hud"
+    hud = "auto",
+
     -- Banking system (set to "none" if you don't use society banking)
     -- Options: "auto", "none", "tgg-banking", "Renewed-Banking", "RxBanking", "okokBanking", "bablo-banking", "sky_banking"
     banking = "auto",
