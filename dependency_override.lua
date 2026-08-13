@@ -26,12 +26,12 @@ return {
     framework = "auto",
 
     -- Your inventory system
-    -- Options: "auto", "qs-inventory", "ox_inventory", "tgiann-inventory", "codem-inventory", "core_inventory"
-    inventory = "auto",
+    -- Options: "auto", "qs-inventory", "ox_inventory", "one_inventory", "tgiann-inventory", "codem-inventory", "core_inventory"
+    inventory = "one_inventory",
 
     -- Your targeting system
     -- Options: "auto", "ox_target", "qb-target"
-    target = "auto",
+    target = "ox_target",
 
     ---========================================---
     --- OPTIONAL SYSTEMS
@@ -44,28 +44,28 @@ return {
 
     -- Fuel system (set to "none" if you don't need fuel management)
     -- Options: "auto", "none", "ox_fuel", "LegacyFuel", "cdn-fuel", "lc_fuel"
-    fuel = "auto",
+    fuel = "lc_fuel",
 
     -- Death check system (set to "none" to use your framework's built-in death checks)
     -- Options: "auto", "none", "sky_ambulancejob", "wasabi_ambulance", "wasabi_ambulance_v2", "osp_ambulance"
-    death = "auto",
+    death = "osp_ambulance",
 
     -- HUD system (set to "none" if you don't use a HUD resource)
     -- Options: "auto", "none", "jg-hud", "esx_hud", "wais-hudv6", "0r-hud-v3", "17mov_Hud",
     -- "izzy-hudv6", "vms_hud", "rhud", "envi-hud", "cx-hud", "tgiann-lumihud", "izzy-hudv7",
     -- "hex_4_hud", "minimal-hud", "izzy-hudv5", "tgg-hud", "sync-hud", "hex_hud_prem", "bablo-hud"
-    hud = "auto",
+    hud = "jg-hud",
 
     -- Banking system (set to "none" if you don't use society banking)
-    -- Options: "auto", "none", "tgg-banking", "Renewed-Banking", "RxBanking", "okokBanking", "bablo-banking", "sky_banking"
-    banking = "auto",
+    -- Options: "auto", "none", "kartik-banking", "tgg-banking", "Renewed-Banking", "RxBanking", "okokBanking", "bablo-banking", "sky_banking"
+    banking = "kartik-banking",
 
     -- Notification system (set to "none" to use your framework's built-in notifications)
-    -- Options: "auto", "none", "ox_lib"
-    notification = "auto",
+    -- Options: "auto", "none", "lation_ui", "ox_lib"
+    notification = "lation_ui",
 
     -- Progressbar system
-    -- Options: "auto", "zyke_lib", "ox_lib"
-    -- Defaults to zyke_lib. You must explicitly set "ox_lib" here if you want to use ox progressbars.
-    progressbar = "auto",
+    -- Options: "auto", "zyke_lib", "lation_ui", "ox_lib"
+    -- Defaults to zyke_lib. Set "lation_ui" or "ox_lib" here to use an external progressbar.
+    progressbar = "lation_ui",
 }
