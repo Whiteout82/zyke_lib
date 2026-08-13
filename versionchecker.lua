@@ -108,7 +108,7 @@ local function checkAndLog()
 
     -- Handle API errors
     if (not latest.version) then
-        print(("^3[%s] Could not fetch version, please contact discord.gg/zykeresources. (Status: %s | Code: %s)^7"):format(ResName, latest.status, latest.code))
+        print(("^3[%s] Could not fetch version, please contact https://discord.zykeresources.com. (Status: %s | Code: %s)^7"):format(ResName, latest.status, latest.code))
         return false
     end
 

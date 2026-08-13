@@ -245,7 +245,7 @@ dependencies {
 ## Links
 
 -   [Documentation](https://docs.zykeresources.com/free-resources/zyke-lib)
--   [Discord Community](https://discord.zykeresources.com/)
+-   [Discord Community](https://discord.zykeresources.com)
 -   [Store](https://store.zykeresources.com/)
 
 ## Credits
