@@ -27,11 +27,11 @@ return {
 
     -- Your inventory system
     -- Options: "auto", "qs-inventory", "ox_inventory", "one_inventory", "tgiann-inventory", "codem-inventory", "core_inventory"
-    inventory = "one_inventory",
+    inventory = "auto",
 
     -- Your targeting system
     -- Options: "auto", "ox_target", "qb-target"
-    target = "ox_target",
+    target = "auto",
 
     ---========================================---
     --- OPTIONAL SYSTEMS
@@ -44,28 +44,28 @@ return {
 
     -- Fuel system (set to "none" if you don't need fuel management)
     -- Options: "auto", "none", "ox_fuel", "LegacyFuel", "cdn-fuel", "lc_fuel"
-    fuel = "lc_fuel",
+    fuel = "auto",
 
     -- Death check system (set to "none" to use your framework's built-in death checks)
     -- Options: "auto", "none", "sky_ambulancejob", "wasabi_ambulance", "wasabi_ambulance_v2", "osp_ambulance"
-    death = "osp_ambulance",
+    death = "auto",
 
     -- HUD system (set to "none" if you don't use a HUD resource)
     -- Options: "auto", "none", "jg-hud", "esx_hud", "wais-hudv6", "0r-hud-v3", "17mov_Hud",
     -- "izzy-hudv6", "vms_hud", "rhud", "envi-hud", "cx-hud", "tgiann-lumihud", "izzy-hudv7",
     -- "hex_4_hud", "minimal-hud", "izzy-hudv5", "tgg-hud", "sync-hud", "hex_hud_prem", "bablo-hud"
-    hud = "jg-hud",
+    hud = "auto",
 
     -- Banking system (set to "none" if you don't use society banking)
     -- Options: "auto", "none", "kartik-banking", "tgg-banking", "Renewed-Banking", "RxBanking", "okokBanking", "bablo-banking", "sky_banking"
-    banking = "kartik-banking",
+    banking = "auto",
 
     -- Notification system (set to "none" to use your framework's built-in notifications)
     -- Options: "auto", "none", "lation_ui", "ox_lib"
-    notification = "lation_ui",
+    notification = "auto",
 
     -- Progressbar system
     -- Options: "auto", "zyke_lib", "lation_ui", "ox_lib"
     -- Defaults to zyke_lib. Set "lation_ui" or "ox_lib" here to use an external progressbar.
-    progressbar = "lation_ui",
+    progressbar = "auto",
 }
