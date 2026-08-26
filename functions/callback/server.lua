@@ -106,7 +106,7 @@ local function triggerClientCallback(plyId, event, cbExtras, ...)
             end
         end
 
-        TriggerClientEvent(cbEvent:format(event), plyId, reqId, args and table.unpack(args))
+        TriggerClientEvent(cbEvent:format(event), plyId, reqId, table.unpack(args))
 
         -- Timeout handler for this attempt
         if (
