@@ -132,6 +132,9 @@ Functions.debug.internal("Loaded gang", GangSystem)
 loadSystem("fuel", "fuel")
 Functions.debug.internal("Loaded fuel", FuelSystem)
 
+loadSystem("vehicleKeys", "vehicleKeys")
+Functions.debug.internal("Loaded vehicle keys", VehicleKeysSystem)
+
 loadSystem("death", "death")
 Functions.debug.internal("Loaded death", DeathSystem)
 
