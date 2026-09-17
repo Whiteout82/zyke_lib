@@ -1,4 +1,10 @@
+---@param v1 string @ Current resource version
+---@param v2 string @ Latest available resource version
+---@return boolean outdated
 local function isVersionOutdated(v1, v2)
+    v1 = v1:gsub("^v", "")
+    v2 = v2:gsub("^v", "")
+
     local v1Nums = {}
     for value in string.gmatch(v1, "[^.]+") do
         v1Nums[#v1Nums+1] = tonumber(value)
@@ -9,12 +15,12 @@ local function isVersionOutdated(v1, v2)
         v2Nums[#v2Nums+1] = tonumber(value)
     end
 
-    for i = 1, #v1Nums do
-        local outdated = (v1Nums[i] or 0) < (v2Nums[i] or 0)
+    for i = 1, math.max(#v1Nums, #v2Nums) do
+        local current = v1Nums[i] or 0
+        local latest = v2Nums[i] or 0
 
-        if (outdated) then
-            return true
-        end
+        if (current < latest) then return true end
+        if (current > latest) then return false end
     end
 
     return false
@@ -108,7 +114,7 @@ local function checkAndLog()
 
     -- Handle API errors
     if (not latest.version) then
-        print(("^3[%s] Could not fetch version, please contact discord.gg/zykeresources. (Status: %s | Code: %s)^7"):format(ResName, latest.status, latest.code))
+        print(("^3[%s] Could not fetch version, please contact https://discord.zykeresources.com. (Status: %s | Code: %s)^7"):format(ResName, latest.status, latest.code))
         return false
     end
 

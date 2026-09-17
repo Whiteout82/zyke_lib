@@ -119,7 +119,7 @@ Each system supports the following values:
 | `"<resource_name>"` | Use a specific resource (will wait for it to start) |
 | `"none"` | Skip detection entirely, fall back to your framework's built-in system |
 
-> **Note:** `"none"` is only valid for **optional** systems (gang, fuel, death, banking, notification). Setting it means the library will use your framework's default behavior instead.
+> **Note:** `"none"` is only valid for **optional** systems (gang, fuel, vehicle keys, death, banking, notification). Setting it means the library will use your framework's default behavior instead.
 
 ### Available Systems
 
@@ -137,6 +137,7 @@ Each system supports the following values:
 |---|---|
 | `gang` | `"auto"`, `"none"`, `"pug-gangs"` |
 | `fuel` | `"auto"`, `"none"`, `"ox_fuel"`, `"LegacyFuel"`, `"cdn-fuel"`, `"lc_fuel"` |
+| `vehicleKeys` | `"auto"`, `"none"`, `"zyke_vehiclekeys"`, `"qb-vehiclekeys"`, `"qbx_vehiclekeys"`, `"qs-vehiclekeys"`, `"wasabi_carlock"` |
 | `death` | `"auto"`, `"none"`, `"sky_ambulancejob"`, `"wasabi_ambulance"`, `"wasabi_ambulance_v2"`, `"osp_ambulance"` |
 | `hud` | `"auto"`, `"none"`, or any HUD listed under [HUD Visibility](#hud-visibility) |
 | `banking` | `"auto"`, `"none"`, `"tgg-banking"`, `"Renewed-Banking"`, `"RxBanking"`, `"okokBanking"`, `"bablo-banking"`, `"sky_banking"` |
@@ -154,6 +155,7 @@ return {
 
     gang = "none",    -- Use framework's built-in gang system
     fuel = "ox_fuel",
+    vehicleKeys = "auto",
     death = "auto",
     hud = "auto",
     banking = "none",
@@ -163,6 +165,92 @@ return {
 ```
 
 > **Tip:** If your server gets stuck on the dependency loading step, set the appropriate system to the exact resource name you use instead of `"auto"`.
+
+## Vehicle Keys
+
+`Z.vehicleKeys.*` methods belong to `zyke_lib`; they dispatch to exports or events owned by the selected key resource. The tables below list every supported method and integration. When a method has no branch for the selected provider, it returns the documented false, nil, zero, or empty-table default.
+
+### Key state terminology
+
+- **Frequency** is the current physical-key generation for a plate. Item-backed providers store it in key metadata and advance it during rotation so older key items stop granting access.
+- **Key counter** tracks active permanent keys for replacement-limit enforcement. It excludes garage-managed and temporary access; its increment, decrement, and reset methods adjust accounting without granting or removing access themselves.
+- **Access** is persistent, garage-managed identifier access stored separately from keys issued directly to players. Updating it does not revoke purchased or otherwise issued keys.
+- **Temporary access** is a replacement runtime-only identifier map. It is not persisted by the provider and must be restored after a resource restart.
+- **Vehicle-state import** seeds legacy frequency, counter, and garage access when the provider has no existing state for the plate.
+- **Vehicle-action notification** sends provider feedback, such as lock sounds, after another resource performs an action. It does not authorize or change vehicle state.
+
+`rotate(plate)` invalidates player-issued permanent keys while preserving garage-managed access. `deleteVehicle(plate)` retires the provider state so old keys cannot regain access if the plate is later reused.
+
+### Shared inspection methods
+
+| `Z.vehicleKeys` method | Provider export | Purpose |
+|---|---|---|
+| `getProvider()` | None | Selected resource name |
+| `isAvailable()` | None | Whether the selected resource is started |
+| `getCapabilities()` | `GetCapabilities` | Provider feature and argument requirements |
+
+### Server methods
+
+| `Z.vehicleKeys` method | Provider export | Capability flag |
+|---|---|---|
+| `give(plyId, plate, allowFallback?, context?)` | `GiveKey` | `giveKey` |
+| `giveTemporary(plyId, plate, skipCanGiveCheck?, allowFallback?)` | `GiveTemporaryKey`, or the provider's normal grant | `giveTemporaryKey` |
+| `has(plyId, plate)` | `HasKey` | `hasKey` |
+| `remove(plyId, plate)` | `RemoveKey` | `removeKey` |
+| `removeAll(plyId, plate)` | `RemoveAllKeys`, or the provider's normal removal | `removeAllKeys` |
+| `rotate(plate)` | `RotateKeys` | `rotateKeys` |
+| `renamePlate(oldPlate, newPlate)` | `RenamePlate` | `renamePlate` |
+| `deleteVehicle(plate)` | `DeleteVehicle` | `deleteVehicle` |
+| `setAccess(plate, access)` | `SetAccess` | `setAccess` |
+| `setTemporaryAccess(plate, access)` | `SetTemporaryAccess` | `temporaryAccessSync` |
+| `importVehicleState(plate, state)` | `ImportVehicleState` | `importVehicleState` |
+| `getKeyCounter(plate)` | `GetKeyCounter` | `keyCounter` |
+| `getKeyFrequency(plate)` | `GetKeyFrequency` | `keyFrequency` |
+| `incrementKeyCounter(plate)` | `IncrementKeyCounter` | `keyCounter` |
+| `decrementKeyCounter(plate, amount?)` | `DecrementKeyCounter` | `keyCounter` |
+| `resetKeyCounter(plate)` | `ResetKeyCounter` | `keyCounter` |
+| `getAccessiblePlates(plyId)` | `GetAccessiblePlates` | `listKeys` |
+| `notifyVehicleAction(plyId, netId, action, desiredState)` | `NotifyVehicleAction` | `vehicleActionFeedback` |
+
+### Client methods
+
+| `Z.vehicleKeys` method | Provider export | Capability flag |
+|---|---|---|
+| `give(plateOrVehicle)` | `GiveKey` | `giveKey` |
+| `has(plateOrVehicle)` | `HasKey` | `hasKey` |
+| `remove(plateOrVehicle)` | `RemoveKey` | `removeKey` |
+| `getAccessiblePlates()` | Provider key list | `listKeys` |
+| `setLockState(vehicle, locked)` | `SetLockState` | `lockControl` |
+| `setEngineState(vehicle, enabled)` | `SetEngineState` | `engineControl` |
+| `getItemLabelSettings()` | `GetItemLabelSettings` | `customKeyLabels` |
+| `getSavedItemLabel()` | `GetSavedItemLabel` | `customKeyLabels` |
+| `setSavedItemLabel(label)` | `SetSavedItemLabel` | `customKeyLabels` |
+| `getPersonalSettings()` | `GetPersonalSettings` | `personalSettings` |
+| `setPersonalSetting(name, value)` | `SetPersonalSetting` | `personalSettings` |
+| `playKeyFobSound()` | `PlayKeyFobSound` | `keyFobSound` |
+| `getKeybinds()` | `GetKeybinds` | `keybinds` |
+
+### Built-in provider adapters
+
+| Provider | Client integration | Server integration |
+|---|---|---|
+| `zyke_vehiclekeys` | All client exports listed above | All server exports listed above |
+| `qb-vehiclekeys` | Give event `vehiclekeys:client:SetOwner`, `HasKeys` export, remove event `qb-vehiclekeys:client:RemoveKeys`, and the provider key-list callback | `GiveKeys`, `HasKeys`, and `RemoveKeys` exports; key listing bridges through the client |
+| `qbx_vehiclekeys` | `HasKeys` export with a live vehicle; give/remove unavailable | `GiveKeys`, `HasKeys`, and `RemoveKeys` exports with a live vehicle; key listing resolves the player's `keysList` state bag |
+| `qs-vehiclekeys` | `GiveKeys`, `GetKey`, and `RemoveKeys` exports with plate/model | Server requests bridge to those client exports; key listing reads `vehiclekeys` item metadata |
+| `wasabi_carlock` | `GiveKey`, `HasKey`, `RemoveKey`, and `GetAllKeys` exports | Give/has/remove use server exports; key listing bridges through the client |
+
+Qbox and Quasar require a live vehicle for the operations marked above. Check `requiresVehicle` and `serverAuthoritative` before calling a provider outside a normal streamed-vehicle flow. Capability-only metadata such as `identifierAccess`, `itemAccess`, `liveMenu`, and `actionMaxDistance` is returned unchanged by `getCapabilities()`.
+
+### Adding a provider
+
+Vehicle-key integrations use direct system checks rather than a provider registry or export-name map. Add the resource name to `systems/vehicleKeys.lua` when it should be auto-detected, then add direct branches for its supported methods in `functions/vehicleKeys/client.lua` and `functions/vehicleKeys/server.lua`. Each branch owns its real export or event name, execution side, arguments, and return conversion in one place.
+
+An exact `vehicleKeys` override does not need to appear in the auto-detection list, but every supported operation still needs an explicit system branch. Unknown systems fall through to the method's false, nil, zero, or empty-table default; there is no generic export contract.
+
+This table describes outbound `zyke_lib` dispatch. Incoming QB/QBX/QS/Wasabi compatibility exports and events are separate adapters owned by `zyke_vehiclekeys`.
+
+Vehicle-key state is read from the active provider through `getAccessiblePlates`; `zyke_lib` does not synthesize a mutation event because direct provider exports cannot be intercepted reliably.
 
 ## HUD Visibility
 
@@ -245,7 +333,7 @@ dependencies {
 ## Links
 
 -   [Documentation](https://docs.zykeresources.com/free-resources/zyke-lib)
--   [Discord Community](https://discord.zykeresources.com/)
+-   [Discord Community](https://discord.zykeresources.com)
 -   [Store](https://store.zykeresources.com/)
 
 ## Credits
